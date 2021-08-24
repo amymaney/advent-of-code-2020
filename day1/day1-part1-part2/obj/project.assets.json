@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/amyshaw/Desktop/me/endjin/advent-of-code-2020/day1/day1-part1-part2/day1-part1-part2.csproj",
+      "projectUniqueName": "/Users/amyshaw/Desktop/me/endjin/advent-of-code-2020 15.01.11/day1/day1-part1-part2/day1-part1-part2.csproj",
       "projectName": "day1-part1-part2",
-      "projectPath": "/Users/amyshaw/Desktop/me/endjin/advent-of-code-2020/day1/day1-part1-part2/day1-part1-part2.csproj",
+      "projectPath": "/Users/amyshaw/Desktop/me/endjin/advent-of-code-2020 15.01.11/day1/day1-part1-part2/day1-part1-part2.csproj",
       "packagesPath": "/Users/amyshaw/.nuget/packages/",
-      "outputPath": "/Users/amyshaw/Desktop/me/endjin/advent-of-code-2020/day1/day1-part1-part2/obj/",
+      "outputPath": "/Users/amyshaw/Desktop/me/endjin/advent-of-code-2020 15.01.11/day1/day1-part1-part2/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/amyshaw/.nuget/NuGet/NuGet.Config"
