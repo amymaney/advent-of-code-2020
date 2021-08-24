@@ -13,7 +13,7 @@ namespace src
             Console.WriteLine(HowManyBags(false));
 
             // PART 2
-            Console.WriteLine(HowManyInside(true));
+            //Console.WriteLine(HowManyInside(true));
         }
 
         static int HowManyInside(bool useMyMap)
