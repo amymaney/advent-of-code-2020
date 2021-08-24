@@ -1,0 +1,21 @@
+hgt:164cm ecl:gry
+eyr:2025
+pid:147932207 iyr:2011 byr:1983 hcl:#fffffd
+
+iyr:2013 hcl:#ceb3a1
+hgt:78in eyr:2030
+byr:1976 ecl:grn pid:860033328
+
+ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
+byr:1942 iyr:2017 cid:147 hgt:69in
+
+ecl:blu pid:000000123 eyr:2025
+byr:1986 hcl:#3abdef
+iyr:2013 hgt:60in
+
+eyr:2027 hcl:#7d3b0c
+pid:377701492 ecl:gry byr:1971 hgt:174cm
+iyr:2023
+
+byr:2001 hcl:#4784a2 hgt:161cm iyr:2014 eyr:2025 pid:955262336
+ecl:amb
