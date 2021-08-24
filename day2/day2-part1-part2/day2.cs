@@ -113,4 +113,3 @@ namespace day2
         }
     }
 }
-
