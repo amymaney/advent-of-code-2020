@@ -13,8 +13,10 @@ namespace src
             Console.WriteLine(HowManyBags(false));
 
             // PART 2
-            //Console.WriteLine(HowManyInside(true));
+            Console.WriteLine(HowManyInside(false));
         }
+
+        record BagInfo (List<(int Count, string Colour)> Bags, int? Count);
 
         static int HowManyInside(bool useMyMap)
         {
@@ -26,34 +28,55 @@ namespace src
 
             int lengg = lines.Length;
 
-            string myBag = "shiny gold bags contain";
-            string currentLine;
-            string[] BagsSplit;
-
-            List<int> noOfBag = new List<int>();
-            
-            List<string> Bag = new List<string>();
+            string myBag = "shiny gold";
 
             List<string> list = new List<string>();
-            List<string> ListOfCorrectBags = new List<string>();
+
+            Dictionary<string, BagInfo> bags = new Dictionary<string, BagInfo>();
 
             for(int i = 0; i < lengg; i++)
             {
-                currentLine = lines[i];
-                list.Add(currentLine);
-
-                if(currentLine.StartsWith(myBag))
+                string[] colourAndContent = lines[i].Split(" bags contain ");
+                string bagColour = colourAndContent[0];
+                string[] containedBags = colourAndContent[1].Contains("no other bags")
+                    ? new string [0]
+                    :  colourAndContent[1].Split(", ");
+                BagInfo currentBag = new BagInfo(containedBags.Select(t =>
                 {
-                    BagsSplit = currentLine.Split(new[] {" contain ", " "}, StringSplitOptions.RemoveEmptyEntries);
-                    noOfBag.Add(Int32.Parse(BagsSplit[3]));
-                    Bag.Add(BagsSplit[4] + " " + BagsSplit[5]);
-                    
-                    Array.Clear(BagsSplit, 0, BagsSplit.Length);
-                }
+                    // t will look like this: 
+                    // 2 muted yellow bags.
+                    int firstSpaceIndex = t.IndexOf(' ');
+                    string countText = t.Substring(0, firstSpaceIndex);
+                    int count = int.Parse(countText);
+                    int bagIndex = t.IndexOf(" bag");
+                    string colour = t.Substring(firstSpaceIndex+1, bagIndex-(firstSpaceIndex+1));
+
+                    return (count, colour);
+                }).ToList(), null);
+
+                bags.Add(bagColour, currentBag);
+
             }
 
+            int GetBagCount(string bagColour)
+            {
+                BagInfo info = bags[bagColour];
 
+                if(info.Count.HasValue)
+                {
+                    return info.Count.Value;
+                }
+                
+                int count;
 
+                count = info.Bags.Sum(childBagType => GetBagCount(childBagType.Colour)*childBagType.Count)+1;
+
+                bags[bagColour] = info with{Count = count};
+                
+                return count;
+            }
+
+            System.Console.WriteLine(GetBagCount(myBag)-1);
             return bagCount;
         }
 
