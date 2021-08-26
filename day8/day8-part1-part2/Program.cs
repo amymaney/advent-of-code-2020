@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace day8_part1_part2
 {
@@ -6,7 +9,76 @@ namespace day8_part1_part2
     {
         static void Main()
         {
-            
+            // PART 1
+            Console.WriteLine(FindAccumulatorValue(false));
+        }
+
+        static int FindAccumulatorValue(bool useMyMap)
+        {
+            int accumulatorCount = 0;
+
+             // to swap between example map and real map (for testing)
+            string text = useMyMap ? @"sample.txt" : "input.txt";
+
+            // reads the file, holds in lines
+            string[] lines = File.ReadAllLines(text);
+
+            int lengg = lines.Length;
+
+            List<string> operations = new List<string>();
+            List<int> arguments = new List<int>();
+            List<int> usedIndexes = new List<int>();
+
+            for(int i = 0; i < lengg; i++)
+            {
+                var currentLine = lines[i];
+
+                string[] currentInstruction;
+
+                currentInstruction = currentLine.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                arguments.Add(int.Parse(currentInstruction[1]));
+                operations.Add(currentInstruction[0]);
+            }
+
+            for(int i = 0; i < 1000; )
+            {
+                if(operations[i] == "nop")
+                {
+                    usedIndexes.Add(i);
+
+                    // essentially checking if loop has started again
+                    if(usedIndexes.Count != usedIndexes.Distinct().Count())
+                    {
+                        break;
+                    }
+                    else
+                    i++;
+                }
+
+                if(operations[i] == "acc")
+                {
+                    usedIndexes.Add(i);
+                    if(usedIndexes.Count != usedIndexes.Distinct().Count())
+                    {
+                        break;
+                    }
+                    else
+                    accumulatorCount = accumulatorCount + arguments[i];
+                    i++;
+                }
+
+                if(operations[i] == "jmp")
+                {
+                    usedIndexes.Add(i);
+                    if(usedIndexes.Count != usedIndexes.Distinct().Count())
+                    {
+                        break;
+                    }
+                    else
+                    i = arguments[i] + i;
+                }
+            }
+            return accumulatorCount;
         }
     }
 }
