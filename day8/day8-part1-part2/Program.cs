@@ -10,10 +10,65 @@ namespace day8_part1_part2
         static void Main()
         {
             // PART 1
-            Console.WriteLine(FindAccumulatorValue(false));
+            Console.WriteLine(Part1_FindAccumulatorValue(false));
+
+            // PART 2
+            Console.WriteLine(Part2_FindAccumulatorValue(true));
         }
 
-        static int FindAccumulatorValue(bool useMyMap)
+        static int Part2_FindAccumulatorValue(bool useMyMap)
+        {
+            int accumulatorCount = 0;
+
+             // to swap between example map and real map (for testing)
+            string text = useMyMap ? @"sample.txt" : "input.txt";
+
+            // reads the file, holds in lines
+            string[] lines = File.ReadAllLines(text);
+
+            int lengg = lines.Length;
+
+            // need to change either nop to jmp or jump to nop
+
+            List<string> operations = new List<string>();
+            List<int> arguments = new List<int>();
+            List<int> usedIndexes = new List<int>();
+
+            for(int i = 0; i < lengg; i++)
+            {
+                var currentLine = lines[i];
+
+                string[] currentInstruction;
+
+                currentInstruction = currentLine.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                arguments.Add(int.Parse(currentInstruction[1]));
+                operations.Add(currentInstruction[0]);
+            }
+
+            for(int i = 0; i < lengg;)
+            {
+                if(operations[i] == "nop")
+                {
+                    i++;
+                }
+
+                if(operations[i] == "acc")
+                {
+                    accumulatorCount = arguments[i] + accumulatorCount;
+                    i++;
+                }
+
+                if(operations[i] == "jmp")
+                {
+                    usedIndexes.Add(i);
+                    i = arguments[i] + i;
+                }
+            }
+
+            return accumulatorCount;
+        }
+
+        static int Part1_FindAccumulatorValue(bool useMyMap)
         {
             int accumulatorCount = 0;
 
@@ -40,7 +95,7 @@ namespace day8_part1_part2
                 operations.Add(currentInstruction[0]);
             }
 
-            for(int i = 0; i < 1000; )
+            for(int i = 0; i < lengg;)
             {
                 if(operations[i] == "nop")
                 {
