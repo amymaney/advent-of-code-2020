@@ -13,14 +13,12 @@ namespace day8_part1_part2
             Console.WriteLine(Part1_FindAccumulatorValue(false));
 
             // PART 2
-            Console.WriteLine(Part2_FindAccumulatorValue(true));
+            Console.WriteLine(Part2_FindAccumulatorValue(false));
         }
 
         static int Part2_FindAccumulatorValue(bool useMyMap)
         {
-            int accumulatorCount = 0;
-
-             // to swap between example map and real map (for testing)
+            // to swap between example map and real map (for testing)
             string text = useMyMap ? @"sample.txt" : "input.txt";
 
             // reads the file, holds in lines
@@ -28,51 +26,106 @@ namespace day8_part1_part2
 
             int lengg = lines.Length;
 
-            // need to change either nop to jmp or jump to nop
-
-            List<string> operations = new List<string>();
-            List<int> arguments = new List<int>();
-            List<int> usedIndexes = new List<int>();
-
-            for(int i = 0; i < lengg; i++)
+            for (int lineToAdjust = 0; lineToAdjust < lengg; lineToAdjust++)
             {
-                var currentLine = lines[i];
+                int accumulatorCount = 0;
 
-                string[] currentInstruction;
+                lines = File.ReadAllLines(text);
 
-                currentInstruction = currentLine.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-                arguments.Add(int.Parse(currentInstruction[1]));
-                operations.Add(currentInstruction[0]);
+                List<string> operations = new List<string>();
+                List<int> arguments = new List<int>();
+                List<int> usedIndexes = new List<int>();
+
+                for (int i = 0; i < lengg; i++)
+                {
+                    var currentLine = lines[i];
+
+                    string[] currentInstruction;
+
+                    currentInstruction = currentLine.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                    arguments.Add(int.Parse(currentInstruction[1]));
+                    operations.Add(currentInstruction[0]);
+                }
+
+                if(operations[lineToAdjust]=="jmp")
+                {
+                    //Console.WriteLine($"changing line {lineToAdjust} to nop");
+                    operations[lineToAdjust] = "nop";
+                }
+                else if(operations[lineToAdjust] =="nop")
+                {
+                    //Console.WriteLine($"changing line {lineToAdjust} to jmp");
+                    operations[lineToAdjust] = "jmp";
+                }
+                else
+                {
+                    continue;
+                }
+
+                for (int i = 0; i < lengg; i++)
+                {
+                    var currentLine = lines[i];
+
+                    string[] currentInstruction;
+
+                    currentInstruction = currentLine.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                    arguments.Add(int.Parse(currentInstruction[1]));
+                    operations.Add(currentInstruction[0]);
+                }
+
+                for (int i = 0; i < lengg;)
+                {
+                    if (operations[i] == "nop")
+                    {
+                        usedIndexes.Add(i);
+
+                        // essentially checking if loop has started again
+                        if (usedIndexes.Count != usedIndexes.Distinct().Count())
+                        {
+                            break;
+                        }
+                        else
+                            i++;
+                    }
+
+                    if (operations[i] == "acc")
+                    {
+                        usedIndexes.Add(i);
+                        if (usedIndexes.Count != usedIndexes.Distinct().Count())
+                        {
+                            break;
+                        }
+                        else
+                            accumulatorCount = accumulatorCount + arguments[i];
+                        i++;
+                    }
+
+                    if (operations[i] == "jmp")
+                    {
+                        usedIndexes.Add(i);
+                        if (usedIndexes.Count != usedIndexes.Distinct().Count())
+                        {
+                            break;
+                        }
+                        else
+                            i = arguments[i] + i;
+                    }
+
+                    if (i == lengg)
+                    {
+                        return accumulatorCount;
+                    }
+                }
             }
-
-            for(int i = 0; i < lengg;)
-            {
-                if(operations[i] == "nop")
-                {
-                    i++;
-                }
-
-                if(operations[i] == "acc")
-                {
-                    accumulatorCount = arguments[i] + accumulatorCount;
-                    i++;
-                }
-
-                if(operations[i] == "jmp")
-                {
-                    usedIndexes.Add(i);
-                    i = arguments[i] + i;
-                }
-            }
-
-            return accumulatorCount;
+            throw new InvalidOperationException("No suitable alteration found to end program");
         }
+
 
         static int Part1_FindAccumulatorValue(bool useMyMap)
         {
             int accumulatorCount = 0;
 
-             // to swap between example map and real map (for testing)
+            // to swap between example map and real map (for testing)
             string text = useMyMap ? @"sample.txt" : "input.txt";
 
             // reads the file, holds in lines
@@ -84,7 +137,7 @@ namespace day8_part1_part2
             List<int> arguments = new List<int>();
             List<int> usedIndexes = new List<int>();
 
-            for(int i = 0; i < lengg; i++)
+            for (int i = 0; i < lengg; i++)
             {
                 var currentLine = lines[i];
 
@@ -95,42 +148,42 @@ namespace day8_part1_part2
                 operations.Add(currentInstruction[0]);
             }
 
-            for(int i = 0; i < lengg;)
+            for (int i = 0; i < lengg;)
             {
-                if(operations[i] == "nop")
+                if (operations[i] == "nop")
                 {
                     usedIndexes.Add(i);
 
                     // essentially checking if loop has started again
-                    if(usedIndexes.Count != usedIndexes.Distinct().Count())
+                    if (usedIndexes.Count != usedIndexes.Distinct().Count())
                     {
                         break;
                     }
                     else
+                        i++;
+                }
+
+                if (operations[i] == "acc")
+                {
+                    usedIndexes.Add(i);
+                    if (usedIndexes.Count != usedIndexes.Distinct().Count())
+                    {
+                        break;
+                    }
+                    else
+                        accumulatorCount = accumulatorCount + arguments[i];
                     i++;
                 }
 
-                if(operations[i] == "acc")
+                if (operations[i] == "jmp")
                 {
                     usedIndexes.Add(i);
-                    if(usedIndexes.Count != usedIndexes.Distinct().Count())
+                    if (usedIndexes.Count != usedIndexes.Distinct().Count())
                     {
                         break;
                     }
                     else
-                    accumulatorCount = accumulatorCount + arguments[i];
-                    i++;
-                }
-
-                if(operations[i] == "jmp")
-                {
-                    usedIndexes.Add(i);
-                    if(usedIndexes.Count != usedIndexes.Distinct().Count())
-                    {
-                        break;
-                    }
-                    else
-                    i = arguments[i] + i;
+                        i = arguments[i] + i;
                 }
             }
             return accumulatorCount;
